@@ -4,7 +4,8 @@ import com.BasicsOfSpring.SpringBasics.Employee;
 //import jakarta.websocket.server.PathParam;
 import com.BasicsOfSpring.SpringBasics.EmployeeJPARepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -125,6 +126,13 @@ public class DemoController {
     @ExceptionHandler(EmployeeNotFoundException.class)
     public String handleException(EmployeeNotFoundException ex){
         return ex.getMessage();
+    }
+
+    //pagination
+    @GetMapping("/get-page/{page}/{size}")
+    public Page<Employee> getEmpData(@PathVariable int page, @PathVariable int size){
+        Page<Employee> pageable= jpa.findAll(PageRequest.of(page, size));
+        return pageable;
     }
 }
 
